@@ -51,13 +51,13 @@ public class TweetArrayAdapter extends ArrayAdapter<BieberTweet>{
 		// Get reference to ImageView 
 		ImageView profilePicture = (ImageView) row.findViewById(R.id.profile_picture);
 		
-		// Get reference to TextView - country_name
+		// Get reference to TextView
 		TextView user = (TextView) row.findViewById(R.id.user);
 		
-		// Get reference to TextView - country_abbrev
+		// Get reference to TextView
 		TextView text = (TextView) row.findViewById(R.id.text);
 
-		// Get reference to TextView - country_abbrev
+
 		TextView creationTime = (TextView) row.findViewById(R.id.creation_time);
 		
 		//Set stuff
@@ -72,7 +72,7 @@ public class TweetArrayAdapter extends ArrayAdapter<BieberTweet>{
 			e.printStackTrace();
 		}
 		
-		// Set country abbreviation
+		// return row
 		return row;
 	}
 }
