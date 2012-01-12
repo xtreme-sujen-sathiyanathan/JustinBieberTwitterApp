@@ -24,7 +24,7 @@ import android.widget.Toast;
 import org.json.*;
 
 public class JustinBieberTwitterApp extends Activity {
-	List<BieberTweet> tweets = new ArrayList<BieberTweet>();
+	//List<BieberTweet> tweets = new ArrayList<BieberTweet>();
 	
     /** Called when the activity is first created. */
     @Override
@@ -34,32 +34,26 @@ public class JustinBieberTwitterApp extends Activity {
         Log.v("check","OK");
         try {
 
-	        	createTweets(new GetTweetsTask().execute().get());
+	        	new GetTweetsTask() {
+	        		@Override
+	        		public void onPostExecute(String s)
+	        		{
+	        			displayTweets(tweets);
+	        		}
+	        	}.execute();
 	        }
         catch(Exception e)
         {
         	Log.v("check",e.getMessage());
         }
         
-        ListView lv = (ListView) this.findViewById(R.id.tweetLV);
-      lv.setAdapter(new TweetArrayAdapter(this, R.layout.list_item, tweets));
+        
     }
     
-    public void createTweets(String response)
+    public void displayTweets(List<BieberTweet> tweets)
     {
-    	try {
-			JSONObject jsonObject = new JSONObject(response);
-			JSONArray results = jsonObject.getJSONArray("results");
-			BieberTweet bt;
-			for(int i = 0; i < results.length();i++)
-			{
-				 bt = new BieberTweet(results.getJSONObject(i));
-				 tweets.add(bt);
-			}
-			
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+    	ListView lv = (ListView) this.findViewById(R.id.tweetLV);
+	    lv.setAdapter(new TweetArrayAdapter(this, R.layout.list_item, tweets));
     }
+
 }
