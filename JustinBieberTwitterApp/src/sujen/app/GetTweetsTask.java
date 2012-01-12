@@ -2,6 +2,8 @@ package sujen.app;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -10,15 +12,22 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ListView;
 
 public class GetTweetsTask extends AsyncTask<Void, Void, String>{
+	List<BieberTweet> tweets = new ArrayList<BieberTweet>();
 
 
 	@Override
 	protected String doInBackground(Void... params) {
+
+		List<BieberTweet> tweets = new ArrayList<BieberTweet>();
 
 		 HttpClient httpclient = new DefaultHttpClient();
 	        HttpResponse response;
@@ -33,7 +42,8 @@ public class GetTweetsTask extends AsyncTask<Void, Void, String>{
 		        {
 		        	ByteArrayOutputStream out = new ByteArrayOutputStream();
 		        	response.getEntity().writeTo(out);
-		        	return out.toString();
+		        	createTweets(out.toString());
+		        	return "success";
 		        }
 		        
 			} catch (ClientProtocolException e) {
@@ -47,7 +57,27 @@ public class GetTweetsTask extends AsyncTask<Void, Void, String>{
 	        {
 	        	Log.v("check",e.getMessage());
 	        }
-		return "Error";
+			return "error";
 	}
+	
+	public void createTweets(String response)
+    {
+    	try {
+			JSONObject jsonObject = new JSONObject(response);
+			JSONArray results = jsonObject.getJSONArray("results");
+			BieberTweet bt;
+			for(int i = 0; i < results.length();i++)
+			{
+				 bt = new BieberTweet(results.getJSONObject(i));
+				 tweets.add(bt);
+			}
+			
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    }
+	
+	
 
 }
